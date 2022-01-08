@@ -75,3 +75,31 @@ ggplot(data = blackwood_acacia_df, aes(x = lon, y = lat)) +
   geom_point(color = "darkgreen")
 ```
 
+**Example 4:** Use `tidyr::seperate()` take on column and seperate it out
+
+```{r}
+sf_trees_sep <- sf_trees %>% 
+  separate(species, into = c('spp_scientific', 'spp_common'), sep = ' :: ')
+```
+
+**Example 5:** use 'tidyr::unite()'
+
+```{r}
+ex_5 <- sf_trees %>% 
+  unite('id_status', tree_id, legal_status, sep = '_COOL_')
+```
+
+### Part 2: make some maps
+
+**Step 1:** convert lat/lon to spatial point, `st_as_sf()`
+
+```{r}
+blackwood_accacia_sf <- blackwood_acacia_df %>% 
+  drop_na(lat, lon) %>% 
+  st_as_sf(coords = c('lon', 'lat'))
+
+### we need to tell R what the coordinate refernce system is
+st_crs(blackwood_accacia_sf) <- 4326
+
+```
+
